@@ -83,8 +83,8 @@ InfraSafe/
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| POST | `/api/auth/register` | ❌ | Register new user |
-| POST | `/api/auth/login` | ❌ | Login & get JWT token |
+| POST | `/api/auth/register` |    | Register new user |
+| POST | `/api/auth/login` |    | Login & get JWT token |
 | POST | `/api/issues` | ✅ Citizen | Report new issue |
 | GET | `/api/issues` | ✅ Any | List all issues |
 | PUT | `/api/issues/:id/assign` | ✅ Municipal | Assign to worker |
@@ -133,5 +133,3 @@ To test, register a user with:
 4. Register and start reporting issues!
 
 ---
-
-**Ready for your hackathon presentation!** Clean, comment-rich code with modern Bootstrap UI.
