@@ -1,0 +1,1498 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Municipal Dashboard - InfraSafe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      :root {
+        --primary-color: #2196F3;
+        --primary-dark: #1976D2;
+        --gradient-start: #1976D2;
+        --gradient-end: #2196F3;
+        --success-color: #4CAF50;
+        --warning-color: #FF9800;
+        --danger-color: #F44336;
+        --info-color: #00BCD4;
+        --dark-blue: #0D47A1;
+        --light-bg: #f8fafc;
+      }
+      
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8fafc;
+        color: #333;
+      }
+      
+      /* Modern Navbar */
+      .navbar {
+        background: white;
+        padding: 18px 0;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      
+      .navbar-brand {
+        font-weight: 800;
+        font-size: 24px;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+      }
+      
+      .navbar-brand i {
+        margin-right: 10px;
+        font-size: 28px;
+      }
+      
+      .municipal-badge {
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-left: 15px;
+        display: inline-flex;
+        align-items: center;
+      }
+      
+      .municipal-badge i {
+        margin-right: 6px;
+        font-size: 12px;
+      }
+      
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      
+      .user-avatar {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #4CAF50, #45a049);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 18px;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+      }
+      
+      .logout-btn {
+        background: transparent;
+        border: 2px solid #e0e0e0;
+        color: #616161;
+        border-radius: 25px;
+        padding: 8px 20px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+      
+      .logout-btn:hover {
+        background: #f5f5f5;
+        color: var(--danger-color);
+        border-color: #f5f5f5;
+        transform: translateY(-2px);
+      }
+      
+      .logout-btn i {
+        margin-right: 8px;
+      }
+      
+      /* Dashboard Container */
+      .dashboard-container {
+        padding: 30px 0;
+      }
+      
+      /* Welcome Header */
+      .welcome-header {
+        background: linear-gradient(135deg, var(--dark-blue), #1565C0);
+        border-radius: 20px;
+        padding: 40px;
+        color: white;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(13, 71, 161, 0.2);
+      }
+      
+      .welcome-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Q50,80 0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+        background-size: cover;
+      }
+      
+      .welcome-content {
+        position: relative;
+        z-index: 1;
+      }
+      
+      .welcome-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        width: fit-content;
+      }
+      
+      .welcome-badge i {
+        margin-right: 8px;
+      }
+      
+      .welcome-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 15px;
+        line-height: 1.2;
+      }
+      
+      .welcome-text {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 30px;
+        line-height: 1.6;
+        max-width: 700px;
+      }
+      
+      /* Stats Cards */
+      .stats-section {
+        margin-bottom: 40px;
+      }
+      
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+      
+      .stat-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid #f0f0f0;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+      
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+      }
+      
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+      
+      .icon-total { background: rgba(33, 150, 243, 0.1); color: var(--primary-color); }
+      .icon-pending { background: rgba(255, 152, 0, 0.1); color: var(--warning-color); }
+      .icon-in-progress { background: rgba(0, 188, 212, 0.1); color: var(--info-color); }
+      .icon-resolved { background: rgba(76, 175, 80, 0.1); color: var(--success-color); }
+      .icon-high { background: rgba(244, 67, 54, 0.1); color: var(--danger-color); }
+      
+      .stat-content h3 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0;
+        color: var(--dark-blue);
+        line-height: 1;
+      }
+      
+      .stat-content p {
+        margin: 5px 0 0;
+        color: #546E7A;
+        font-size: 0.95rem;
+      }
+      
+      .stat-change {
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        margin-top: 5px;
+      }
+      
+      .change-up { color: var(--success-color); }
+      .change-down { color: var(--danger-color); }
+      
+      /* Filters Section */
+      .filters-section {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      }
+      
+      .filters-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+      
+      .filters-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--dark-blue);
+        margin: 0;
+        display: flex;
+        align-items: center;
+      }
+      
+      .filters-title i {
+        margin-right: 12px;
+        color: var(--primary-color);
+      }
+      
+      .filter-controls {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+      
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        min-width: 180px;
+      }
+      
+      .filter-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #546E7A;
+        margin-bottom: 8px;
+      }
+      
+      .filter-select {
+        padding: 10px 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        background: white;
+        font-size: 14px;
+        color: #333;
+        transition: all 0.3s;
+      }
+      
+      .filter-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        outline: none;
+      }
+      
+      .search-box {
+        position: relative;
+        min-width: 250px;
+      }
+      
+      .search-input {
+        width: 100%;
+        padding: 10px 15px 10px 45px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: all 0.3s;
+      }
+      
+      .search-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        outline: none;
+      }
+      
+      .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #757575;
+        font-size: 16px;
+      }
+      
+      /* Issues Table */
+      .issues-section {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        margin-bottom: 40px;
+      }
+      
+      .section-header {
+        background: #f8fafc;
+        padding: 25px;
+        border-bottom: 1px solid #e8f4fd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .section-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--dark-blue);
+        margin: 0;
+        display: flex;
+        align-items: center;
+      }
+      
+      .section-title i {
+        margin-right: 12px;
+        color: var(--primary-color);
+      }
+      
+      .table-actions {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .action-btn-small {
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        border: 1px solid #e0e0e0;
+        background: white;
+        color: #616161;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+      
+      .action-btn-small:hover {
+        background: #f5f5f5;
+        transform: translateY(-2px);
+      }
+      
+      .action-btn-small i {
+        margin-right: 6px;
+      }
+      
+      .action-btn-small.primary {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+        border: none;
+      }
+      
+      .action-btn-small.primary:hover {
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+      }
+      
+      .table-container {
+        overflow-x: auto;
+        padding: 0 25px 25px 25px;
+      }
+      
+      #issuesTable {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+      }
+      
+      #issuesTable thead {
+        background: #f8fafc;
+      }
+      
+      #issuesTable th {
+        padding: 18px 20px;
+        font-weight: 600;
+        color: var(--dark-blue);
+        border-bottom: 2px solid #e8f4fd;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      #issuesTable tbody tr {
+        transition: background 0.3s ease;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      
+      #issuesTable tbody tr:hover {
+        background: #f8fafc;
+      }
+      
+      #issuesTable tbody tr:last-child {
+        border-bottom: none;
+      }
+      
+      #issuesTable td {
+        padding: 20px;
+        vertical-align: middle;
+      }
+      
+      .issue-type-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: white;
+        min-width: 100px;
+        justify-content: center;
+      }
+      
+      .type-pothole { background: var(--danger-color); }
+      .type-water { background: var(--primary-color); }
+      .type-lighting { background: var(--warning-color); }
+      .type-sidewalk { background: var(--success-color); }
+      .type-traffic { background: #9C27B0; }
+      
+      .location-cell {
+        max-width: 200px;
+      }
+      
+      .location-text {
+        font-weight: 500;
+        margin-bottom: 5px;
+        color: #212121;
+      }
+      
+      .location-subtext {
+        font-size: 0.85rem;
+        color: #757575;
+      }
+      
+      .citizen-cell {
+        display: flex;
+        align-items: center;
+      }
+      
+      .citizen-avatar {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        margin-right: 12px;
+        flex-shrink: 0;
+      }
+      
+      .citizen-info h6 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #212121;
+      }
+      
+      .citizen-info p {
+        margin: 3px 0 0;
+        font-size: 0.85rem;
+        color: #757575;
+      }
+      
+      .status-badge {
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-block;
+        text-align: center;
+        min-width: 100px;
+      }
+      
+      .status-pending { background: #FFF3E0; color: #EF6C00; }
+      .status-in-progress { background: #E3F2FD; color: #1565C0; }
+      .status-resolved { background: #E8F5E9; color: #2E7D32; }
+      .status-assigned { background: #F3E5F5; color: #7B1FA2; }
+      
+      .priority-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 5px;
+      }
+      
+      .priority-high { color: var(--danger-color); }
+      .priority-medium { color: var(--warning-color); }
+      .priority-low { color: var(--info-color); }
+      
+      .action-buttons {
+        display: flex;
+        gap: 8px;
+      }
+      
+      .table-action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: #f5f5f5;
+        color: #616161;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .table-action-btn:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+      }
+      
+      .table-action-btn.view { background: rgba(33, 150, 243, 0.1); color: var(--primary-color); }
+      .table-action-btn.edit { background: rgba(255, 152, 0, 0.1); color: var(--warning-color); }
+      .table-action-btn.resolve { background: rgba(76, 175, 80, 0.1); color: var(--success-color); }
+      
+      /* Export & Analytics */
+      .analytics-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #e8f4fd 100%);
+        border-radius: 20px;
+        padding: 35px;
+        margin-top: 40px;
+      }
+      
+      .analytics-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+      
+      .analytics-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--dark-blue);
+        display: flex;
+        align-items: center;
+      }
+      
+      .analytics-title i {
+        margin-right: 12px;
+        color: var(--primary-color);
+      }
+      
+      .export-buttons {
+        display: flex;
+        gap: 15px;
+      }
+      
+      .export-btn {
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 14px;
+        border: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+      }
+      
+      .export-btn i {
+        margin-right: 8px;
+      }
+      
+      .export-btn.pdf {
+        background: var(--danger-color);
+        color: white;
+      }
+      
+      .export-btn.excel {
+        background: var(--success-color);
+        color: white;
+      }
+      
+      .export-btn.report {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+      }
+      
+      .export-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Footer */
+      .dashboard-footer {
+        text-align: center;
+        margin-top: 50px;
+        padding: 20px;
+        color: #757575;
+        font-size: 0.9rem;
+        border-top: 1px solid #e0e0e0;
+      }
+      
+      /* Pagination */
+      .pagination-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 25px;
+        background: #f8fafc;
+        border-top: 1px solid #e8f4fd;
+      }
+      
+      .pagination-info {
+        font-size: 0.9rem;
+        color: #546E7A;
+      }
+      
+      .pagination-controls {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .page-btn {
+        padding: 8px 14px;
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
+        background: white;
+        color: #616161;
+        font-weight: 600;
+        transition: all 0.3s;
+      }
+      
+      .page-btn:hover:not(:disabled) {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+      
+      .page-btn.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+      
+      .page-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      
+      /* Responsive Design */
+      @media (max-width: 992px) {
+        .filters-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+        }
+        
+        .filter-controls {
+          width: 100%;
+        }
+        
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+        }
+        
+        .table-actions {
+          width: 100%;
+          justify-content: flex-start;
+        }
+        
+        .analytics-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .welcome-header {
+          padding: 30px;
+        }
+        
+        .welcome-title {
+          font-size: 2rem;
+        }
+        
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .filter-group {
+          min-width: 100%;
+        }
+        
+        .search-box {
+          min-width: 100%;
+        }
+        
+        .export-buttons {
+          flex-direction: column;
+          width: 100%;
+        }
+        
+        .pagination-container {
+          flex-direction: column;
+          gap: 15px;
+        }
+      }
+      
+      @media (max-width: 576px) {
+        .welcome-title {
+          font-size: 1.7rem;
+        }
+        
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .user-info {
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 10px;
+        }
+        
+        .action-buttons {
+          flex-direction: column;
+        }
+        
+        .table-action-btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <i class="fas fa-shield-alt"></i> InfraSafe
+          <span class="municipal-badge">
+            <i class="fas fa-building"></i> Municipal
+          </span>
+        </a>
+        <div class="user-info">
+          <div class="user-avatar" id="userInitial">M</div>
+          <button id="logoutBtn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+      <div class="container">
+        <!-- Welcome Header -->
+        <div class="welcome-header">
+          <div class="welcome-content">
+            <div class="welcome-badge">
+              <i class="fas fa-building"></i> Municipal Corporation Dashboard
+            </div>
+            <h1 class="welcome-title">Infrastructure Management Center</h1>
+            <p class="welcome-text">
+              Monitor, manage, and resolve citizen-reported infrastructure issues. 
+              Track progress, assign teams, and ensure timely resolution of municipal concerns.
+            </p>
+          </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon icon-total">
+                <i class="fas fa-flag"></i>
+              </div>
+              <div class="stat-content">
+                <h3 id="totalIssues">142</h3>
+                <p>Total Issues</p>
+                <div class="stat-change change-up">
+                  <i class="fas fa-arrow-up me-1"></i> 12% from last week
+                </div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon icon-pending">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="stat-content">
+                <h3 id="pendingIssues">58</h3>
+                <p>Pending Review</p>
+                <div class="stat-change change-down">
+                  <i class="fas fa-arrow-down me-1"></i> 8% from last week
+                </div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon icon-in-progress">
+                <i class="fas fa-tools"></i>
+              </div>
+              <div class="stat-content">
+                <h3 id="inProgressIssues">42</h3>
+                <p>In Progress</p>
+                <div class="stat-change change-up">
+                  <i class="fas fa-arrow-up me-1"></i> 5% from last week
+                </div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon icon-resolved">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-content">
+                <h3 id="resolvedIssues">92</h3>
+                <p>Resolved</p>
+                <div class="stat-change change-up">
+                  <i class="fas fa-arrow-up me-1"></i> 15% from last week
+                </div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon icon-high">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="stat-content">
+                <h3 id="highPriority">24</h3>
+                <p>High Priority</p>
+                <div class="stat-change change-up">
+                  <i class="fas fa-arrow-up me-1"></i> 3% from last week
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+          <div class="filters-header">
+            <h3 class="filters-title">
+              <i class="fas fa-filter"></i> Filter Issues
+            </h3>
+            <div class="filter-controls">
+              <div class="filter-group">
+                <label class="filter-label">Issue Type</label>
+                <select class="filter-select" id="filterType">
+                  <option value="all">All Types</option>
+                  <option value="pothole">Potholes</option>
+                  <option value="water">Water Issues</option>
+                  <option value="lighting">Street Lights</option>
+                  <option value="sidewalk">Sidewalks</option>
+                  <option value="traffic">Traffic Signals</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <select class="filter-select" id="filterStatus">
+                  <option value="all">All Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="in-progress">In Progress</option>
+                  <option value="resolved">Resolved</option>
+                  <option value="assigned">Assigned</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label class="filter-label">Priority</label>
+                <select class="filter-select" id="filterPriority">
+                  <option value="all">All Priorities</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              
+              <div class="search-box">
+                <label class="filter-label">Search</label>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search issues...">
+                <i class="fas fa-search search-icon"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Issues Table -->
+        <div class="issues-section">
+          <div class="section-header">
+            <h3 class="section-title">
+              <i class="fas fa-list-alt"></i> Reported Issues
+              <span class="badge bg-primary ms-2" id="tableCount">25</span>
+            </h3>
+            <div class="table-actions">
+              <button class="action-btn-small" id="refreshTable">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+              <button class="action-btn-small primary" id="assignAll">
+                <i class="fas fa-user-check"></i> Bulk Assign
+              </button>
+              <button class="action-btn-small" id="exportTable">
+                <i class="fas fa-download"></i> Export
+              </button>
+            </div>
+          </div>
+          
+          <div class="table-container">
+            <table class="table" id="issuesTable">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Location</th>
+                  <th>Citizen</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Reported</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Issues will be dynamically inserted here -->
+              </tbody>
+            </table>
+          </div>
+          
+          <!-- Pagination -->
+          <div class="pagination-container">
+            <div class="pagination-info" id="pageInfo">
+              Showing 1-8 of 142 issues
+            </div>
+            <div class="pagination-controls">
+              <button class="page-btn" id="prevPage" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+              </button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">...</button>
+              <button class="page-btn">18</button>
+              <button class="page-btn" id="nextPage">
+                Next <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export & Analytics Section -->
+        <div class="analytics-section">
+          <div class="analytics-header">
+            <h4 class="analytics-title">
+              <i class="fas fa-chart-line"></i> Analytics & Reports
+            </h4>
+            <div class="export-buttons">
+              <button class="export-btn pdf">
+                <i class="fas fa-file-pdf"></i> Export PDF
+              </button>
+              <button class="export-btn excel">
+                <i class="fas fa-file-excel"></i> Export Excel
+              </button>
+              <button class="export-btn report">
+                <i class="fas fa-chart-bar"></i> Generate Report
+              </button>
+            </div>
+          </div>
+          <p class="text-muted">
+            Generate detailed reports, export data for analysis, and track municipal performance metrics.
+            Use the analytics dashboard to identify trends and optimize resource allocation.
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="dashboard-footer">
+          <p>InfraSafe Municipal Dashboard &copy; 2024 | Streamlining infrastructure management</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/municipal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Sample issues data
+        const issuesData = [
+          {
+            id: 1,
+            type: "pothole",
+            title: "Large pothole near intersection",
+            location: "123 Main Street",
+            area: "Downtown",
+            citizen: {
+              name: "John Smith",
+              email: "john@example.com",
+              initial: "J"
+            },
+            priority: "high",
+            status: "pending",
+            reported: "2 hours ago"
+          },
+          {
+            id: 2,
+            type: "water",
+            title: "Water leak at park entrance",
+            location: "Central Park, Main Gate",
+            area: "Central Park",
+            citizen: {
+              name: "Sarah Johnson",
+              email: "sarah@example.com",
+              initial: "S"
+            },
+            priority: "medium",
+            status: "in-progress",
+            reported: "1 day ago"
+          },
+          {
+            id: 3,
+            type: "lighting",
+            title: "Broken street light",
+            location: "456 Maple Avenue",
+            area: "North District",
+            citizen: {
+              name: "Mike Wilson",
+              email: "mike@example.com",
+              initial: "M"
+            },
+            priority: "medium",
+            status: "assigned",
+            reported: "2 days ago"
+          },
+          {
+            id: 4,
+            type: "sidewalk",
+            title: "Cracked sidewalk tiles",
+            location: "789 Pine Road",
+            area: "East Side",
+            citizen: {
+              name: "Emma Davis",
+              email: "emma@example.com",
+              initial: "E"
+            },
+            priority: "low",
+            status: "resolved",
+            reported: "3 days ago"
+          },
+          {
+            id: 5,
+            type: "traffic",
+            title: "Malfunctioning traffic signal",
+            location: "Oak & 5th Street",
+            area: "Commercial District",
+            citizen: {
+              name: "Robert Brown",
+              email: "robert@example.com",
+              initial: "R"
+            },
+            priority: "high",
+            status: "in-progress",
+            reported: "5 hours ago"
+          },
+          {
+            id: 6,
+            type: "pothole",
+            title: "Multiple potholes on bridge",
+            location: "River Bridge, North End",
+            area: "Riverfront",
+            citizen: {
+              name: "Lisa Taylor",
+              email: "lisa@example.com",
+              initial: "L"
+            },
+            priority: "high",
+            status: "pending",
+            reported: "6 hours ago"
+          },
+          {
+            id: 7,
+            type: "water",
+            title: "Drainage blockage",
+            location: "101 Lakeview Drive",
+            area: "Lake District",
+            citizen: {
+              name: "David Miller",
+              email: "david@example.com",
+              initial: "D"
+            },
+            priority: "medium",
+            status: "assigned",
+            reported: "1 day ago"
+          },
+          {
+            id: 8,
+            type: "lighting",
+            title: "Flickering street light",
+            location: "202 Sunset Boulevard",
+            area: "West End",
+            citizen: {
+              name: "Amy Clark",
+              email: "amy@example.com",
+              initial: "A"
+            },
+            priority: "low",
+            status: "resolved",
+            reported: "1 week ago"
+          }
+        ];
+        
+        // Current displayed issues
+        let currentIssues = [...issuesData];
+        let currentPage = 1;
+        const itemsPerPage = 8;
+        
+        // Render issues table
+        function renderIssuesTable(issues = currentIssues) {
+          const tbody = document.querySelector('#issuesTable tbody');
+          tbody.innerHTML = '';
+          
+          // Calculate pagination
+          const startIndex = (currentPage - 1) * itemsPerPage;
+          const endIndex = startIndex + itemsPerPage;
+          const pageIssues = issues.slice(startIndex, endIndex);
+          
+          pageIssues.forEach(issue => {
+            const typeText = {
+              pothole: 'Pothole',
+              water: 'Water Issue',
+              lighting: 'Street Light',
+              sidewalk: 'Sidewalk',
+              traffic: 'Traffic Signal'
+            }[issue.type] || 'Other';
+            
+            const statusText = {
+              pending: 'Pending',
+              'in-progress': 'In Progress',
+              resolved: 'Resolved',
+              assigned: 'Assigned'
+            }[issue.status] || 'Unknown';
+            
+            const priorityText = {
+              high: 'High',
+              medium: 'Medium',
+              low: 'Low'
+            }[issue.priority] || 'Unknown';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>
+                <div class="issue-type-badge type-${issue.type}">
+                  ${typeText}
+                </div>
+              </td>
+              <td class="location-cell">
+                <div class="location-text">${issue.location}</div>
+                <div class="location-subtext">${issue.area}</div>
+              </td>
+              <td>
+                <div class="citizen-cell">
+                  <div class="citizen-avatar">${issue.citizen.initial}</div>
+                  <div class="citizen-info">
+                    <h6>${issue.citizen.name}</h6>
+                    <p>${issue.citizen.email}</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="priority-indicator priority-${issue.priority}">
+                  <i class="fas fa-exclamation-circle"></i> ${priorityText} Priority
+                </div>
+              </td>
+              <td>
+                <div class="status-badge status-${issue.status.replace('-', '')}">
+                  ${statusText}
+                </div>
+              </td>
+              <td>
+                <div class="text-muted">${issue.reported}</div>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="table-action-btn view" title="View Details" onclick="viewIssue(${issue.id})">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="table-action-btn edit" title="Edit Status" onclick="editIssue(${issue.id})">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="table-action-btn resolve" title="Mark Resolved" onclick="resolveIssue(${issue.id})">
+                    <i class="fas fa-check"></i>
+                  </button>
+                </div>
+              </td>
+            `;
+            
+            tbody.appendChild(row);
+          });
+          
+          // Update page info
+          document.getElementById('tableCount').textContent = issues.length;
+          document.getElementById('pageInfo').textContent = 
+            `Showing ${startIndex + 1}-${Math.min(endIndex, issues.length)} of ${issues.length} issues`;
+          
+          // Update pagination buttons
+          updatePaginationButtons(issues.length);
+        }
+        
+        // Update pagination buttons
+        function updatePaginationButtons(totalItems) {
+          const totalPages = Math.ceil(totalItems / itemsPerPage);
+          const prevBtn = document.getElementById('prevPage');
+          const nextBtn = document.getElementById('nextPage');
+          
+          prevBtn.disabled = currentPage === 1;
+          nextBtn.disabled = currentPage === totalPages;
+          
+          // Update active page button (simplified for demo)
+          const pageBtns = document.querySelectorAll('.page-btn:not(#prevPage):not(#nextPage)');
+          pageBtns.forEach((btn, index) => {
+            if (index === 0) btn.classList.toggle('active', currentPage === 1);
+            // In a real app, you would update all page buttons
+          });
+        }
+        
+        // Filter issues
+        function filterIssues() {
+          const typeFilter = document.getElementById('filterType').value;
+          const statusFilter = document.getElementById('filterStatus').value;
+          const priorityFilter = document.getElementById('filterPriority').value;
+          const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+          
+          currentIssues = issuesData.filter(issue => {
+            // Type filter
+            if (typeFilter !== 'all' && issue.type !== typeFilter) return false;
+            
+            // Status filter
+            if (statusFilter !== 'all' && issue.status !== statusFilter) return false;
+            
+            // Priority filter
+            if (priorityFilter !== 'all' && issue.priority !== priorityFilter) return false;
+            
+            // Search filter
+            if (searchQuery && !(
+              issue.title.toLowerCase().includes(searchQuery) ||
+              issue.location.toLowerCase().includes(searchQuery) ||
+              issue.area.toLowerCase().includes(searchQuery) ||
+              issue.citizen.name.toLowerCase().includes(searchQuery) ||
+              issue.citizen.email.toLowerCase().includes(searchQuery)
+            )) return false;
+            
+            return true;
+          });
+          
+          currentPage = 1;
+          renderIssuesTable();
+        }
+        
+        // Event listeners for filters
+        document.getElementById('filterType').addEventListener('change', filterIssues);
+        document.getElementById('filterStatus').addEventListener('change', filterIssues);
+        document.getElementById('filterPriority').addEventListener('change', filterIssues);
+        document.getElementById('searchInput').addEventListener('input', filterIssues);
+        
+        // Refresh table
+        document.getElementById('refreshTable').addEventListener('click', function() {
+          this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing';
+          setTimeout(() => {
+            filterIssues();
+            this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
+            showNotification('Table refreshed successfully', 'success');
+          }, 500);
+        });
+        
+        // Bulk assign
+        document.getElementById('assignAll').addEventListener('click', function() {
+          const pendingIssues = currentIssues.filter(issue => issue.status === 'pending');
+          if (pendingIssues.length > 0) {
+            if (confirm(`Assign ${pendingIssues.length} pending issues to teams?`)) {
+              showNotification(`${pendingIssues.length} issues assigned to teams`, 'success');
+            }
+          } else {
+            showNotification('No pending issues to assign', 'warning');
+          }
+        });
+        
+        // Export table
+        document.getElementById('exportTable').addEventListener('click', function() {
+          showNotification('Exporting table data...', 'info');
+          setTimeout(() => {
+            showNotification('Table exported successfully', 'success');
+          }, 1000);
+        });
+        
+        // Pagination
+        document.getElementById('prevPage').addEventListener('click', function() {
+          if (currentPage > 1) {
+            currentPage--;
+            renderIssuesTable();
+          }
+        });
+        
+        document.getElementById('nextPage').addEventListener('click', function() {
+          const totalPages = Math.ceil(currentIssues.length / itemsPerPage);
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderIssuesTable();
+          }
+        });
+        
+        // Export buttons
+        document.querySelector('.export-btn.pdf').addEventListener('click', function() {
+          showNotification('Generating PDF report...', 'info');
+          setTimeout(() => {
+            showNotification('PDF report generated successfully', 'success');
+          }, 1500);
+        });
+        
+        document.querySelector('.export-btn.excel').addEventListener('click', function() {
+          showNotification('Exporting to Excel...', 'info');
+          setTimeout(() => {
+            showNotification('Excel file downloaded', 'success');
+          }, 1500);
+        });
+        
+        document.querySelector('.export-btn.report').addEventListener('click', function() {
+          showNotification('Generating analytics report...', 'info');
+          setTimeout(() => {
+            showNotification('Report generated successfully', 'success');
+          }, 1500);
+        });
+        
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+          if (confirm('Are you sure you want to logout?')) {
+            // In a real app, you would clear session/tokens here
+            // window.location.href = 'login.html';
+            showNotification('Logout successful! Redirecting to login...', 'info');
+          }
+        });
+        
+        // Notification function
+        function showNotification(message, type = 'info') {
+          // Create notification element
+          const notification = document.createElement('div');
+          notification.className = `notification alert alert-${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info'}`;
+          notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-radius: 12px;
+            animation: slideIn 0.3s ease;
+          `;
+          
+          const icon = type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle';
+          notification.innerHTML = `
+            <div class="d-flex align-items-center">
+              <i class="fas fa-${icon} me-3 fs-4"></i>
+              <div>${message}</div>
+            </div>
+          `;
+          
+          document.body.appendChild(notification);
+          
+          // Remove after 3 seconds
+          setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+              document.body.removeChild(notification);
+            }, 300);
+          }, 3000);
+        }
+        
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+          @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+          }
+          .notification {
+            position: fixed !important;
+          }
+        `;
+        document.head.appendChild(style);
+        
+        // Action functions
+        window.viewIssue = function(id) {
+          const issue = issuesData.find(i => i.id === id);
+          showNotification(`Viewing issue: ${issue.title}`, 'info');
+        };
+        
+        window.editIssue = function(id) {
+          const issue = issuesData.find(i => i.id === id);
+          showNotification(`Editing issue: ${issue.title}`, 'info');
+        };
+        
+        window.resolveIssue = function(id) {
+          const issue = issuesData.find(i => i.id === id);
+          if (confirm(`Mark issue "${issue.title}" as resolved?`)) {
+            issue.status = 'resolved';
+            filterIssues();
+            showNotification(`Issue marked as resolved: ${issue.title}`, 'success');
+          }
+        };
+        
+        // Initialize table
+        renderIssuesTable();
+        
+        // Add animation to stats cards
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach((card, index) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 200 + (index * 100));
+        });
+      });
+    </script>
+  </body>
+</html>

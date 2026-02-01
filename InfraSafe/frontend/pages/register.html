@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register - InfraSafe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      :root {
+        --primary-color: #2196F3;
+        --primary-dark: #1976D2;
+        --gradient-start: #1976D2;
+        --gradient-end: #2196F3;
+        --success-color: #4CAF50;
+        --warning-color: #FF9800;
+        --danger-color: #F44336;
+        --citizen-color: #2196F3;
+        --municipal-color: #4CAF50;
+      }
+      
+      body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        position: relative;
+        overflow-x: hidden;
+      }
+      
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+          radial-gradient(circle at 10% 20%, rgba(33, 150, 243, 0.05) 0%, transparent 20%),
+          radial-gradient(circle at 90% 80%, rgba(76, 175, 80, 0.05) 0%, transparent 20%);
+        z-index: -1;
+      }
+      
+      .register-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      
+      .register-card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        max-width: 480px;
+        width: 100%;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .register-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+      }
+      
+      .register-header {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+        padding: 40px 30px 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .register-header::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Q50,80 0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+        background-size: cover;
+        opacity: 0.3;
+      }
+      
+      .header-content {
+        position: relative;
+        z-index: 2;
+      }
+      
+      .logo-container {
+        margin-bottom: 20px;
+        animation: float 3s ease-in-out infinite;
+      }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      
+      .logo-circle {
+        width: 80px;
+        height: 80px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        position: relative;
+      }
+      
+      .logo-circle::before {
+        content: "";
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+        z-index: -1;
+        opacity: 0.6;
+        filter: blur(10px);
+      }
+      
+      .logo-icon {
+        font-size: 36px;
+        color: var(--primary-color);
+      }
+      
+      .register-title {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+      }
+      
+      .register-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        max-width: 300px;
+        margin: 0 auto;
+        line-height: 1.5;
+      }
+      
+      .register-body {
+        padding: 40px 35px;
+      }
+      
+      .form-group {
+        margin-bottom: 25px;
+        position: relative;
+      }
+      
+      .form-label {
+        font-weight: 600;
+        color: #424242;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+      }
+      
+      .form-label i {
+        margin-right: 10px;
+        color: var(--primary-color);
+        font-size: 16px;
+        width: 20px;
+        text-align: center;
+      }
+      
+      .input-with-icon {
+        position: relative;
+      }
+      
+      .form-control {
+        padding: 16px 16px 16px 50px;
+        border: 2px solid #e8e8e8;
+        border-radius: 12px;
+        font-size: 15px;
+        transition: all 0.3s;
+        background-color: #fcfcfc;
+        height: 52px;
+      }
+      
+      .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+        background-color: white;
+      }
+      
+      .input-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #757575;
+        font-size: 18px;
+        z-index: 2;
+        transition: color 0.3s;
+      }
+      
+      .form-control:focus + .input-icon {
+        color: var(--primary-color);
+      }
+      
+      .input-suffix {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #757575;
+        cursor: pointer;
+        font-size: 18px;
+      }
+      
+      .password-strength {
+        height: 4px;
+        background: #e0e0e0;
+        border-radius: 2px;
+        margin-top: 8px;
+        overflow: hidden;
+        position: relative;
+      }
+      
+      .strength-meter {
+        height: 100%;
+        width: 0%;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+      
+      .strength-text {
+        font-size: 12px;
+        margin-top: 5px;
+        text-align: right;
+        color: #757575;
+      }
+      
+      /* Role Selection Styling */
+      .role-options {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+      }
+      
+      .role-card {
+        flex: 1;
+        border: 2px solid #e8e8e8;
+        border-radius: 12px;
+        padding: 20px 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: white;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .role-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      
+      .role-card.active {
+        border-color: var(--primary-color);
+        background: rgba(33, 150, 243, 0.05);
+        box-shadow: 0 5px 15px rgba(33, 150, 243, 0.15);
+      }
+      
+      .role-icon {
+        font-size: 28px;
+        margin-bottom: 10px;
+        display: block;
+      }
+      
+      .role-card.citizen .role-icon {
+        color: var(--citizen-color);
+      }
+      
+      .role-card.municipal .role-icon {
+        color: var(--municipal-color);
+      }
+      
+      .role-name {
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 5px;
+      }
+      
+      .role-desc {
+        font-size: 12px;
+        color: #757575;
+        line-height: 1.4;
+      }
+      
+      /* Terms Checkbox */
+      .terms-container {
+        margin: 30px 0;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        border: 1px solid #e8e8e8;
+      }
+      
+      .form-check {
+        padding-left: 35px;
+      }
+      
+      .form-check-input {
+        width: 20px;
+        height: 20px;
+        margin-left: -35px;
+        margin-top: 0.2em;
+        border: 2px solid #adb5bd;
+        cursor: pointer;
+      }
+      
+      .form-check-input:checked {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+      
+      .form-check-label {
+        color: #424242;
+        font-size: 14px;
+        line-height: 1.5;
+        cursor: pointer;
+      }
+      
+      .terms-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      
+      .terms-link:hover {
+        text-decoration: underline;
+      }
+      
+      /* Register Button */
+      .btn-register {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+        border: none;
+        padding: 18px;
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 12px;
+        width: 100%;
+        transition: all 0.3s;
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3);
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .btn-register::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+      }
+      
+      .btn-register:hover::before {
+        left: 100%;
+      }
+      
+      .btn-register:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(33, 150, 243, 0.4);
+      }
+      
+      .btn-register:active {
+        transform: translateY(0);
+      }
+      
+      .login-link {
+        text-align: center;
+        margin-top: 25px;
+        color: #757575;
+        font-size: 15px;
+      }
+      
+      .login-link a {
+        color: var(--primary-color);
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.3s;
+        display: inline-flex;
+        align-items: center;
+      }
+      
+      .login-link a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+      }
+      
+      .login-link a i {
+        margin-left: 8px;
+        font-size: 14px;
+        transition: transform 0.3s;
+      }
+      
+      .login-link a:hover i {
+        transform: translateX(4px);
+      }
+      
+      /* Success Message */
+      .success-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transform: translateX(150%);
+        transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        z-index: 1000;
+        max-width: 300px;
+        border-left: 5px solid var(--success-color);
+      }
+      
+      .success-message.show {
+        transform: translateX(0);
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 576px) {
+        .register-card {
+          max-width: 100%;
+          margin: 10px;
+        }
+        
+        .register-header {
+          padding: 30px 20px 25px;
+        }
+        
+        .register-body {
+          padding: 30px 25px;
+        }
+        
+        .role-options {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Success Message (Hidden by default) -->
+    <div class="success-message">
+      <div class="d-flex align-items-center">
+        <div class="flex-shrink-0">
+          <div class="rounded-circle bg-success p-2">
+            <i class="fas fa-check text-white"></i>
+          </div>
+        </div>
+        <div class="flex-grow-1 ms-3">
+          <h6 class="mb-0">Registration Successful!</h6>
+          <p class="text-muted mb-0" style="font-size: 13px;">Redirecting to login...</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="register-container">
+      <div class="register-card">
+        <!-- Header Section -->
+        <div class="register-header">
+          <div class="header-content">
+            <div class="logo-container">
+              <div class="logo-circle">
+                <i class="fas fa-shield-alt logo-icon"></i>
+              </div>
+            </div>
+            <h1 class="register-title">Join InfraSafe</h1>
+            <p class="register-subtitle">Create your account to access smart infrastructure management tools</p>
+          </div>
+        </div>
+        
+        <!-- Registration Form -->
+        <div class="register-body">
+          <form id="registerForm">
+            <!-- Name Field -->
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-user"></i> Full Name
+              </label>
+              <div class="input-with-icon">
+                <input class="form-control" id="name" placeholder="Enter your full name" required>
+                <span class="input-icon">
+                  <i class="fas fa-user-circle"></i>
+                </span>
+              </div>
+            </div>
+            
+            <!-- Email Field -->
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-envelope"></i> Email Address
+              </label>
+              <div class="input-with-icon">
+                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                <span class="input-icon">
+                  <i class="fas fa-at"></i>
+                </span>
+              </div>
+            </div>
+            
+            <!-- Password Field -->
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-lock"></i> Password
+              </label>
+              <div class="input-with-icon">
+                <input type="password" class="form-control" id="password" placeholder="Create a strong password" required>
+                <span class="input-icon">
+                  <i class="fas fa-key"></i>
+                </span>
+                <span class="input-suffix" id="togglePassword">
+                  <i class="fas fa-eye"></i>
+                </span>
+              </div>
+              <!-- Password Strength Meter -->
+              <div class="password-strength">
+                <div class="strength-meter" id="strengthMeter"></div>
+              </div>
+              <div class="strength-text" id="strengthText">Password strength: Very weak</div>
+              <div class="form-text mt-2">
+                <small class="text-muted">
+                  <i class="fas fa-info-circle"></i> Use at least 8 characters with letters, numbers & symbols
+                </small>
+              </div>
+            </div>
+            
+            <!-- Role Selection -->
+            <div class="form-group">
+              <label class="form-label">
+                <i class="fas fa-user-tag"></i> Select Your Role
+              </label>
+              
+              <div class="role-options">
+                <!-- Citizen Role -->
+                <div class="role-card citizen active" data-role="Citizen">
+                  <i class="fas fa-user-friends role-icon"></i>
+                  <div class="role-name">Citizen</div>
+                  <div class="role-desc">Report issues & track infrastructure updates</div>
+                </div>
+                
+                <!-- Municipal Role -->
+                <div class="role-card municipal" data-role="Municipal">
+                  <i class="fas fa-building role-icon"></i>
+                  <div class="role-name">Municipal</div>
+                  <div class="role-desc">Manage & monitor infrastructure systems</div>
+                </div>
+              </div>
+              
+              <!-- Hidden select for form submission -->
+              <select id="role" class="form-select d-none" required>
+                <option value="Citizen" selected>Citizen</option>
+                <option value="Municipal">Municipal</option>
+              </select>
+            </div>
+            
+            <!-- Terms and Conditions -->
+            <div class="terms-container">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="terms" required>
+                <label class="form-check-label" for="terms">
+                  I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a>. I understand that my data will be processed in accordance with InfraSafe's data protection guidelines.
+                </label>
+              </div>
+            </div>
+            
+            <!-- Register Button -->
+            <button class="btn btn-register" type="submit">
+              <i class="fas fa-user-plus me-2"></i> Create Account
+            </button>
+            
+            <!-- Login Link -->
+            <div class="login-link">
+              <p>Already have an account? 
+                <a href="login.html">
+                  Sign In <i class="fas fa-arrow-right"></i>
+                </a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Initialize
+      document.addEventListener('DOMContentLoaded', function() {
+        // Password visibility toggle
+        document.getElementById('togglePassword').addEventListener('click', function() {
+          const passwordInput = document.getElementById('password');
+          const icon = this.querySelector('i');
+          
+          if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+          } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+          }
+        });
+        
+        // Role selection
+        const roleCards = document.querySelectorAll('.role-card');
+        const roleSelect = document.getElementById('role');
+        
+        roleCards.forEach(card => {
+          card.addEventListener('click', function() {
+            // Remove active class from all cards
+            roleCards.forEach(c => c.classList.remove('active'));
+            // Add active class to clicked card
+            this.classList.add('active');
+            // Update hidden select
+            const selectedRole = this.getAttribute('data-role');
+            roleSelect.value = selectedRole;
+          });
+        });
+        
+        // Password strength checker
+        const passwordInput = document.getElementById('password');
+        const strengthMeter = document.getElementById('strengthMeter');
+        const strengthText = document.getElementById('strengthText');
+        
+        passwordInput.addEventListener('input', function() {
+          const password = this.value;
+          let strength = 0;
+          let meterColor = '#F44336';
+          let text = 'Very weak';
+          
+          // Length check
+          if (password.length >= 8) strength += 1;
+          if (password.length >= 12) strength += 1;
+          
+          // Complexity checks
+          if (/[A-Z]/.test(password)) strength += 1;
+          if (/[0-9]/.test(password)) strength += 1;
+          if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+          
+          // Determine strength level
+          switch(strength) {
+            case 0:
+            case 1:
+              meterColor = '#F44336';
+              text = 'Very weak';
+              break;
+            case 2:
+              meterColor = '#FF9800';
+              text = 'Weak';
+              break;
+            case 3:
+              meterColor = '#FFC107';
+              text = 'Fair';
+              break;
+            case 4:
+              meterColor = '#8BC34A';
+              text = 'Good';
+              break;
+            case 5:
+              meterColor = '#4CAF50';
+              text = 'Strong';
+              break;
+          }
+          
+          // Update meter
+          strengthMeter.style.width = (strength * 20) + '%';
+          strengthMeter.style.backgroundColor = meterColor;
+          strengthText.textContent = 'Password strength: ' + text;
+          strengthText.style.color = meterColor;
+        });
+        
+        // Form submission
+        const registerForm = document.getElementById('registerForm');
+        const successMessage = document.querySelector('.success-message');
+        
+        registerForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Validate terms
+          const termsCheckbox = document.getElementById('terms');
+          if (!termsCheckbox.checked) {
+            termsCheckbox.classList.add('is-invalid');
+            return;
+          }
+          
+          // Get form values
+          const name = document.getElementById('name').value;
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          const role = document.getElementById('role').value;
+          
+          // Add loading state to button
+          const submitBtn = this.querySelector('.btn-register');
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Creating Account...';
+          submitBtn.disabled = true;
+          
+          // Simulate API call delay (replace with actual auth.js registration)
+          setTimeout(() => {
+            // Show success message
+            successMessage.classList.add('show');
+            
+            // Reset button
+            setTimeout(() => {
+              submitBtn.innerHTML = '<i class="fas fa-check me-2"></i> Account Created!';
+              submitBtn.style.background = 'linear-gradient(to right, #4CAF50, #45a049)';
+              
+              // Redirect to login page after 2 seconds
+              setTimeout(() => {
+                window.location.href = "login.html";
+              }, 1500);
+            }, 500);
+            
+            // Your existing auth.js registration logic here
+            // For example:
+            // registerUser(name, email, password, role);
+            
+          }, 1500);
+        });
+        
+        // Input validation styling
+        const formInputs = document.querySelectorAll('.form-control');
+        formInputs.forEach(input => {
+          input.addEventListener('input', function() {
+            if (this.checkValidity()) {
+              this.classList.remove('is-invalid');
+              this.classList.add('is-valid');
+            } else {
+              this.classList.remove('is-valid');
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - InfraSafe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      :root {
+        --primary-color: #2196F3;
+        --primary-dark: #1976D2;
+        --gradient-start: #1976D2;
+        --gradient-end: #2196F3;
+        --success-color: #4CAF50;
+        --light-bg: #f8f9fa;
+      }
+      
+      body {
+        background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      
+      .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      
+      .login-card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        max-width: 420px;
+        width: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .login-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      }
+      
+      .login-header {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+        padding: 40px 30px 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .login-header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+        background-size: 30px 30px;
+        opacity: 0.3;
+        animation: float 20s linear infinite;
+      }
+      
+      @keyframes float {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .logo-container {
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .logo-circle {
+        width: 80px;
+        height: 80px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+      
+      .logo-icon {
+        font-size: 36px;
+        color: var(--primary-color);
+      }
+      
+      .login-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .login-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .login-body {
+        padding: 40px 35px;
+      }
+      
+      .form-label {
+        font-weight: 600;
+        color: #424242;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+      }
+      
+      .form-label i {
+        margin-right: 10px;
+        color: var(--primary-color);
+        font-size: 16px;
+      }
+      
+      .form-control {
+        padding: 14px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.3s;
+        background-color: #fcfcfc;
+      }
+      
+      .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        background-color: white;
+      }
+      
+      .input-group-text {
+        background-color: #f8f9fa;
+        border: 2px solid #e0e0e0;
+        border-right: none;
+        border-radius: 12px 0 0 12px;
+      }
+      
+      .password-toggle {
+        cursor: pointer;
+        color: #757575;
+        transition: color 0.3s;
+      }
+      
+      .password-toggle:hover {
+        color: var(--primary-color);
+      }
+      
+      .btn-login {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+        border: none;
+        padding: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 12px;
+        width: 100%;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        margin-top: 10px;
+      }
+      
+      .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+      }
+      
+      .btn-login:active {
+        transform: translateY(0);
+      }
+      
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 30px 0;
+        color: #757575;
+      }
+      
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #e0e0e0;
+      }
+      
+      .divider span {
+        padding: 0 15px;
+        font-size: 14px;
+      }
+      
+      .register-link {
+        text-align: center;
+        margin-top: 25px;
+        color: #757575;
+        font-size: 15px;
+      }
+      
+      .register-link a {
+        color: var(--primary-color);
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.3s;
+        display: inline-flex;
+        align-items: center;
+      }
+      
+      .register-link a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+      }
+      
+      .register-link a i {
+        margin-left: 8px;
+        font-size: 14px;
+        transition: transform 0.3s;
+      }
+      
+      .register-link a:hover i {
+        transform: translateX(4px);
+      }
+      
+      .features-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #f0f0f0;
+      }
+      
+      .feature-item {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        color: #616161;
+        flex: 1;
+        min-width: 120px;
+      }
+      
+      .feature-item i {
+        color: var(--success-color);
+        margin-right: 8px;
+        font-size: 14px;
+      }
+      
+      /* Responsive adjustments */
+      @media (max-width: 576px) {
+        .login-card {
+          max-width: 100%;
+        }
+        
+        .login-header {
+          padding: 30px 20px 25px;
+        }
+        
+        .login-body {
+          padding: 30px 25px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-card">
+        <!-- Header Section -->
+        <div class="login-header">
+          <div class="logo-container">
+            <div class="logo-circle">
+              <i class="fas fa-shield-alt logo-icon"></i>
+            </div>
+            <h1 class="login-title">InfraSafe</h1>
+            <p class="login-subtitle">Secure Infrastructure Management Platform</p>
+          </div>
+        </div>
+        
+        <!-- Login Form -->
+        <div class="login-body">
+          <form id="loginForm">
+            <!-- Email Field -->
+            <div class="mb-4">
+              <label for="email" class="form-label">
+                <i class="fas fa-envelope"></i> Email Address
+              </label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="fas fa-user"></i>
+                </span>
+                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+              </div>
+            </div>
+            
+            <!-- Password Field -->
+            <div class="mb-4">
+              <label for="password" class="form-label">
+                <i class="fas fa-lock"></i> Password
+              </label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                <span class="input-group-text password-toggle" id="togglePassword">
+                  <i class="fas fa-eye"></i>
+                </span>
+              </div>
+              <div class="form-text text-end mt-2">
+                <a href="#" style="text-decoration: none; color: var(--primary-color); font-size: 14px;">
+                  <i class="fas fa-key"></i> Forgot Password?
+                </a>
+              </div>
+            </div>
+            
+            <!-- Login Button -->
+            <button class="btn btn-login" type="submit">
+              <i class="fas fa-sign-in-alt me-2"></i> Login to InfraSafe
+            </button>
+            
+            <!-- Divider -->
+            <div class="divider">
+              <span>New to InfraSafe?</span>
+            </div>
+            
+            <!-- Register Link -->
+            <div class="register-link">
+              <p>Don't have an account? 
+                <a href="register.html">
+                  Create Account <i class="fas fa-arrow-right"></i>
+                </a>
+              </p>
+            </div>
+            
+            <!-- Features List -->
+            <div class="features-list">
+              <div class="feature-item">
+                <i class="fas fa-check-circle"></i> Secure Authentication
+              </div>
+              <div class="feature-item">
+                <i class="fas fa-check-circle"></i> Real-time Monitoring
+              </div>
+              <div class="feature-item">
+                <i class="fas fa-check-circle"></i> Data Protection
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Password visibility toggle
+      document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const icon = this.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+        } else {
+          passwordInput.type = 'password';
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+        }
+      });
+      
+      // Form validation styling
+      const loginForm = document.getElementById('loginForm');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      
+      emailInput.addEventListener('input', function() {
+        if (this.checkValidity()) {
+          this.classList.remove('is-invalid');
+          this.classList.add('is-valid');
+        } else {
+          this.classList.remove('is-valid');
+        }
+      });
+      
+      passwordInput.addEventListener('input', function() {
+        if (this.value.length >= 6) {
+          this.classList.remove('is-invalid');
+          this.classList.add('is-valid');
+        } else {
+          this.classList.remove('is-valid');
+        }
+      });
+      
+      // Form submission animation
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Add loading state to button
+        const submitBtn = this.querySelector('.btn-login');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Logging in...';
+        submitBtn.disabled = true;
+        
+        // Simulate API call delay (replace with actual auth call)
+        setTimeout(() => {
+          // Your existing auth.js login logic here
+          // For demo purposes, just reset the button
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+          
+          // Show success feedback (optional)
+          submitBtn.innerHTML = '<i class="fas fa-check me-2"></i> Login Successful!';
+          submitBtn.style.background = 'linear-gradient(to right, #4CAF50, #45a049)';
+          
+          setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.style.background = '';
+            // Redirect or perform actual login
+            // window.location.href = "dashboard.html";
+          }, 1500);
+        }, 1500);
+      });
+    </script>
+  </body>
+</html>

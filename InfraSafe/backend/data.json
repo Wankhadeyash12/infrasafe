@@ -1,0 +1,144 @@
+{
+  "users": [
+    {
+      "id": "1769763572161",
+      "name": "aniruddha kasar",
+      "email": "aniruddha@gmail.com",
+      "password": "$2b$08$qcoW5bqXpzmlU7a/ppJEgOCIVF1s8BZeFfNZPlNNkha6h7.uZye/G",
+      "role": "Citizen"
+    },
+    {
+      "id": "1769763680844",
+      "name": "yash wankhade",
+      "email": "wankahdeyash2006@gmail.com",
+      "password": "$2b$08$tL.0l9uAdyY3S0djS/mAYe7NxVhFRHPDkAwc3GSLhHxkX3DS4cwzq",
+      "role": "Municipal"
+    },
+    {
+      "id": "1769763736573",
+      "name": "yash wankhade",
+      "email": "ywankhade901@gmail.com",
+      "password": "$2b$08$/.NhFXcJik./f.iKbJHxaO4uao5OrD3dhG3bfthbM/fsUISSPtdzq",
+      "role": "Municipal"
+    },
+    {
+      "id": "1769777680514",
+      "name": "Gauri Selkar",
+      "email": "gauri@gmail.com",
+      "password": "$2b$08$a3ZmEL4CB9w3mguNbjD5YuYbs/8kXwDn4t2pBJg9RwCtDjbTfrVIq",
+      "role": "Citizen"
+    },
+    {
+      "id": "1769792452278",
+      "name": "Vanshika",
+      "email": "vanshika@gmail.com",
+      "password": "$2b$08$0HRb4ymia99aQqe05LbGv.SB1t/dVCHBv6qeyIS5EkS6KiOAmazL.",
+      "role": "Citizen"
+    },
+    {
+      "id": "1769792557179",
+      "name": "Anirudh",
+      "email": "aniruddh@gmail.com",
+      "password": "$2b$08$W.APnMzRsNxWZGdeL0DRZerKsuGQeBV1CoiHGzlBYMnO5DlMBx6za",
+      "role": "Municipal"
+    },
+    {
+      "id": "1769792642510",
+      "name": "aniruddha kasar",
+      "email": "anirudha@gmail.com",
+      "password": "$2b$08$fAipmoyk4sDagHoIlhH8xu4TweETz0/EkvVZr8.lGp2XMsvca1ote",
+      "role": "Municipal"
+    },
+    {
+      "id": "1769825280568",
+      "name": "Maya",
+      "email": "maya@gmail.com",
+      "password": "$2b$08$FUlBoL6iZAnCQZKXijzc4eHQQrtHUVfiPUbbDw67tiaur8KoWbr1y",
+      "role": "Citizen"
+    },
+    {
+      "id": "1769825481647",
+      "name": "yash wankhade",
+      "email": "yash@gmail.com",
+      "password": "$2b$08$tmewy1RNNA2ifMWN4VOoTOIvXX/ldx3NwS2XqPm6ChZ2rc63BpHRe",
+      "role": "Municipal"
+    }
+  ],
+  "issues": [
+    {
+      "id": "1769763630757",
+      "type": "Pothole",
+      "description": "their is a pathhole on the main road",
+      "image": "/uploads/1769763630748-Screenshot 2025-06-22 203757.png",
+      "location": {
+        "lat": 21.090213,
+        "lng": 79.163216
+      },
+      "status": "Resolved",
+      "severity": "High",
+      "reporterId": "1769763572161",
+      "reporterName": "aniruddha kasar",
+      "createdAt": "2026-01-30T09:00:30.757Z"
+    },
+    {
+      "id": "1769799671987",
+      "type": "Pothole",
+      "description": "their is a pothhole on the road",
+      "image": null,
+      "location": {
+        "lat": 21.090173,
+        "lng": 79.163416
+      },
+      "status": "Pending",
+      "severity": "High",
+      "reporterId": "1769763572161",
+      "reporterName": "aniruddha kasar",
+      "createdAt": "2026-01-30T19:01:11.987Z"
+    },
+    {
+      "id": "1769825411206",
+      "type": "Road Blockage",
+      "description": "Dighori flyover is bloked",
+      "image": "/uploads/1769825411199-Screenshot 2025-06-22 203829.png",
+      "location": {
+        "lat": 21.090173,
+        "lng": 79.163416
+      },
+      "status": "Resolved",
+      "severity": "High",
+      "reporterId": "1769825280568",
+      "reporterName": "Maya",
+      "createdAt": "2026-01-31T02:10:11.206Z"
+    },
+    {
+      "id": "1769826831997",
+      "type": "Pothole",
+      "description": "parbhani uttar trimurti nagar biggest pathhole",
+      "image": null,
+      "location": {
+        "lat": 21.090173,
+        "lng": 79.163416
+      },
+      "status": "Assigned",
+      "severity": "High",
+      "reporterId": "1769825280568",
+      "reporterName": "Maya",
+      "createdAt": "2026-01-31T02:33:51.997Z"
+    },
+    {
+      "id": "1769833932831",
+      "type": "Water Leakage",
+      "description": "water leakage at vihirgaon",
+      "image": null,
+      "location": {
+        "lat": 21.090173,
+        "lng": 79.163416
+      },
+      "status": "Resolved",
+      "severity": "Medium",
+      "reporterId": "1769825280568",
+      "reporterName": "Maya",
+      "createdAt": "2026-01-31T04:32:12.832Z"
+    }
+  ]
+}

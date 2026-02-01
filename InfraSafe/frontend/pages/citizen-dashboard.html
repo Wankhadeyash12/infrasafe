@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Citizen Dashboard - InfraSafe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      :root {
+        --primary-color: #2196F3;
+        --primary-dark: #1976D2;
+        --gradient-start: #1976D2;
+        --gradient-end: #2196F3;
+        --success-color: #4CAF50;
+        --warning-color: #FF9800;
+        --danger-color: #F44336;
+        --dark-blue: #0D47A1;
+        --light-bg: #f8fafc;
+      }
+      
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8fafc;
+        color: #333;
+      }
+      
+      /* Modern Navbar */
+      .navbar {
+        background: white;
+        padding: 18px 0;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      
+      .navbar-brand {
+        font-weight: 800;
+        font-size: 24px;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+      }
+      
+      .navbar-brand i {
+        margin-right: 10px;
+        font-size: 28px;
+      }
+      
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 18px;
+      }
+      
+      .logout-btn {
+        background: transparent;
+        border: 2px solid #e0e0e0;
+        color: #616161;
+        border-radius: 25px;
+        padding: 8px 20px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+      
+      .logout-btn:hover {
+        background: #f5f5f5;
+        color: var(--danger-color);
+        border-color: #f5f5f5;
+        transform: translateY(-2px);
+      }
+      
+      .logout-btn i {
+        margin-right: 8px;
+      }
+      
+      /* Dashboard Container */
+      .dashboard-container {
+        padding: 40px 0;
+      }
+      
+      /* Welcome Header */
+      .welcome-header {
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        border-radius: 20px;
+        padding: 40px;
+        color: white;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(33, 150, 243, 0.2);
+      }
+      
+      .welcome-header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Q50,80 0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+        background-size: cover;
+      }
+      
+      .welcome-content {
+        position: relative;
+        z-index: 1;
+        max-width: 600px;
+      }
+      
+      .welcome-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+      
+      .welcome-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 15px;
+        line-height: 1.2;
+      }
+      
+      .welcome-text {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 30px;
+        line-height: 1.6;
+      }
+      
+      .user-name {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 600;
+      }
+      
+      /* Quick Actions */
+      .section-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: var(--dark-blue);
+        display: flex;
+        align-items: center;
+      }
+      
+      .section-title i {
+        margin-right: 12px;
+        color: var(--primary-color);
+      }
+      
+      .quick-actions {
+        margin-bottom: 50px;
+      }
+      
+      .action-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+      
+      .action-card {
+        background: white;
+        border-radius: 18px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid #e8f4fd;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .action-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(33, 150, 243, 0.15);
+        border-color: var(--primary-color);
+      }
+      
+      .action-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--gradient-start), var(--gradient-end));
+      }
+      
+      .action-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.2) 100%);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        color: var(--primary-color);
+        font-size: 32px;
+      }
+      
+      .action-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: var(--dark-blue);
+      }
+      
+      .action-description {
+        color: #546E7A;
+        margin-bottom: 25px;
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+      
+      .action-btn {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 28px;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+      
+      .action-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
+        color: white;
+      }
+      
+      .action-btn i {
+        margin-right: 10px;
+        font-size: 16px;
+      }
+      
+      .btn-outline-action {
+        background: transparent;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+      }
+      
+      .btn-outline-action:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+      
+      /* Stats Cards */
+      .stats-section {
+        margin-bottom: 50px;
+      }
+      
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+      }
+      
+      .stat-card {
+        background: white;
+        border-radius: 18px;
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid #f0f0f0;
+      }
+      
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+      
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+      
+      .icon-reported { background: rgba(244, 67, 54, 0.1); color: var(--danger-color); }
+      .icon-in-progress { background: rgba(255, 152, 0, 0.1); color: var(--warning-color); }
+      .icon-resolved { background: rgba(76, 175, 80, 0.1); color: var(--success-color); }
+      .icon-contribution { background: rgba(33, 150, 243, 0.1); color: var(--primary-color); }
+      
+      .stat-content h3 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0;
+        color: var(--dark-blue);
+        line-height: 1;
+      }
+      
+      .stat-content p {
+        margin: 5px 0 0;
+        color: #546E7A;
+        font-size: 0.95rem;
+      }
+      
+      /* Recent Issues */
+      .recent-issues {
+        margin-bottom: 50px;
+      }
+      
+      .issues-table-container {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+      }
+      
+      .table-header {
+        background: #f8fafc;
+        padding: 20px 25px;
+        border-bottom: 1px solid #e8f4fd;
+      }
+      
+      .table-header h5 {
+        margin: 0;
+        font-weight: 600;
+        color: var(--dark-blue);
+      }
+      
+      .table-body {
+        padding: 0;
+      }
+      
+      .issue-row {
+        display: flex;
+        align-items: center;
+        padding: 20px 25px;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background 0.3s ease;
+      }
+      
+      .issue-row:hover {
+        background: #f8fafc;
+      }
+      
+      .issue-row:last-child {
+        border-bottom: none;
+      }
+      
+      .issue-type {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        flex-shrink: 0;
+        font-size: 18px;
+        color: white;
+      }
+      
+      .type-pothole { background: var(--danger-color); }
+      .type-water { background: var(--primary-color); }
+      .type-lighting { background: var(--warning-color); }
+      .type-sidewalk { background: var(--success-color); }
+      
+      .issue-details {
+        flex: 1;
+      }
+      
+      .issue-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #212121;
+      }
+      
+      .issue-meta {
+        display: flex;
+        gap: 15px;
+        font-size: 0.85rem;
+        color: #757575;
+      }
+      
+      .issue-status {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-left: 15px;
+        flex-shrink: 0;
+      }
+      
+      .status-pending { background: #FFF3E0; color: #EF6C00; }
+      .status-in-progress { background: #E3F2FD; color: #1565C0; }
+      .status-resolved { background: #E8F5E9; color: #2E7D32; }
+      
+      /* Quick Tips */
+      .quick-tips {
+        background: linear-gradient(135deg, #f8fafc 0%, #e8f4fd 100%);
+        border-radius: 20px;
+        padding: 35px;
+        margin-top: 40px;
+      }
+      
+      .tips-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: var(--dark-blue);
+        display: flex;
+        align-items: center;
+      }
+      
+      .tips-title i {
+        margin-right: 12px;
+        color: var(--primary-color);
+      }
+      
+      .tips-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .tips-list li {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      
+      .tips-list li:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      
+      .tip-icon {
+        width: 30px;
+        height: 30px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 15px;
+        flex-shrink: 0;
+        font-size: 14px;
+      }
+      
+      .tip-content {
+        flex: 1;
+        color: #546E7A;
+        line-height: 1.6;
+      }
+      
+      /* Footer */
+      .dashboard-footer {
+        text-align: center;
+        margin-top: 50px;
+        padding: 20px;
+        color: #757575;
+        font-size: 0.9rem;
+        border-top: 1px solid #e0e0e0;
+      }
+      
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .welcome-header {
+          padding: 30px;
+        }
+        
+        .welcome-title {
+          font-size: 2rem;
+        }
+        
+        .action-cards {
+          grid-template-columns: 1fr;
+        }
+        
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .issue-meta {
+          flex-direction: column;
+          gap: 5px;
+        }
+      }
+      
+      @media (max-width: 576px) {
+        .welcome-title {
+          font-size: 1.7rem;
+        }
+        
+        .section-title {
+          font-size: 1.5rem;
+        }
+        
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+        
+        .user-info {
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <i class="fas fa-shield-alt"></i> InfraSafe
+        </a>
+        <div class="user-info">
+          <div class="user-avatar" id="userInitial">U</div>
+          <button id="logoutBtn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+      <div class="container">
+        <!-- Welcome Header -->
+        <div class="welcome-header">
+          <div class="welcome-content">
+            <div class="welcome-badge">
+              <i class="fas fa-user-circle me-2"></i> Citizen Dashboard
+            </div>
+            <h1 class="welcome-title">Welcome back, <span class="user-name" id="userName">User</span>!</h1>
+            <p class="welcome-text">
+              Use your citizen dashboard to report infrastructure issues, track repair progress, 
+              and contribute to making your city safer and better for everyone.
+            </p>
+            <div class="d-flex gap-3 flex-wrap">
+              <a href="report-issue.html" class="action-btn">
+                <i class="fas fa-plus-circle"></i> Report New Issue
+              </a>
+              <a href="issue-map.html" class="action-btn btn-outline-action">
+                <i class="fas fa-map-marked-alt"></i> View Issue Map
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <h3 class="section-title">
+            <i class="fas fa-bolt"></i> Quick Actions
+          </h3>
+          <div class="action-cards">
+            <div class="action-card">
+              <div class="action-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <h4 class="action-title">Report Issue</h4>
+              <p class="action-description">
+                Report potholes, broken street lights, water leaks, or other infrastructure problems in your area.
+              </p>
+              <a href="report-issue.html" class="action-btn">
+                <i class="fas fa-plus-circle"></i> Report Now
+              </a>
+            </div>
+            
+            <div class="action-card">
+              <div class="action-icon">
+                <i class="fas fa-map-marked-alt"></i>
+              </div>
+              <h4 class="action-title">View Issues Map</h4>
+              <p class="action-description">
+                Explore all reported issues in your city on an interactive map with real-time updates.
+              </p>
+              <a href="issue-map.html" class="action-btn">
+                <i class="fas fa-map"></i> Open Map
+              </a>
+            </div>
+            
+            <div class="action-card">
+              <div class="action-icon">
+                <i class="fas fa-history"></i>
+              </div>
+              <h4 class="action-title">My Reports</h4>
+              <p class="action-description">
+                Track the status of your submitted reports and see updates from municipal authorities.
+              </p>
+              <a href="my-reports.html" class="action-btn">
+                <i class="fas fa-list-alt"></i> View Reports
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-section">
+          <h3 class="section-title">
+            <i class="fas fa-chart-bar"></i> Your Impact
+          </h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon icon-reported">
+                <i class="fas fa-flag"></i>
+              </div>
+              <div class="stat-content">
+                <h3 id="reportedCount">12</h3>
+                <p>Issues Reported</p>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon icon-in-progress">
+                <i class="fas fa-tools"></i>
+              </div>
+              <div class="stat-content">
+                <h3 id="inProgressCount">5</h3>
+                <p>In Progress</p>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon icon-resolved">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-content">
+                <h3 id="resolvedCount">7</h3>
+                <p>Resolved</p>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon icon-contribution">
+                <i class="fas fa-medal"></i>
+              </div>
+              <div class="stat-content">
+                <h3 id="contributionScore">89</h3>
+                <p>Contribution Score</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Issues -->
+        <div class="recent-issues">
+          <h3 class="section-title">
+            <i class="fas fa-clock"></i> Recent Issues Near You
+          </h3>
+          <div class="issues-table-container">
+            <div class="table-header">
+              <h5>Latest Infrastructure Issues</h5>
+            </div>
+            <div class="table-body" id="recentIssuesList">
+              <!-- Issues will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Tips -->
+        <div class="quick-tips">
+          <h4 class="tips-title">
+            <i class="fas fa-lightbulb"></i> Tips for Effective Reporting
+          </h4>
+          <ul class="tips-list">
+            <li>
+              <div class="tip-icon">
+                <i class="fas fa-camera"></i>
+              </div>
+              <div class="tip-content">
+                <strong>Take clear photos:</strong> Include multiple angles and ensure the issue is well-lit and visible.
+              </div>
+            </li>
+            <li>
+              <div class="tip-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="tip-content">
+                <strong>Be specific with location:</strong> Use precise addresses or drop a pin on the map for accurate GPS coordinates.
+              </div>
+            </li>
+            <li>
+              <div class="tip-icon">
+                <i class="fas fa-align-left"></i>
+              </div>
+              <div class="tip-content">
+                <strong>Provide detailed descriptions:</strong> Include size, severity, and any safety concerns related to the issue.
+              </div>
+            </li>
+            <li>
+              <div class="tip-icon">
+                <i class="fas fa-bell"></i>
+              </div>
+              <div class="tip-content">
+                <strong>Enable notifications:</strong> Get updates when your reported issues are being addressed or resolved.
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="dashboard-footer">
+          <p>InfraSafe Citizen Dashboard &copy; 2024 | Making cities safer, one report at a time</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/citizen.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Sample user data (replace with actual user data from your auth system)
+        const userData = {
+          name: "John Smith",
+          initial: "J",
+          email: "john@example.com"
+        };
+        
+        // Update user info
+        document.getElementById('userName').textContent = userData.name;
+        document.getElementById('userInitial').textContent = userData.initial;
+        document.getElementById('welcome').innerHTML = `Welcome, ${userData.name}`;
+        
+        // Sample recent issues data
+        const recentIssues = [
+          {
+            id: 1,
+            title: "Large Pothole on Oak Street",
+            type: "pothole",
+            status: "in-progress",
+            location: "123 Oak Street",
+            date: "2 days ago",
+            userReported: true
+          },
+          {
+            id: 2,
+            title: "Water Leak at Park Entrance",
+            type: "water",
+            status: "pending",
+            location: "Central Park Main Gate",
+            date: "3 days ago",
+            userReported: false
+          },
+          {
+            id: 3,
+            title: "Broken Street Light",
+            type: "lighting",
+            status: "resolved",
+            location: "456 Maple Avenue",
+            date: "1 week ago",
+            userReported: true
+          },
+          {
+            id: 4,
+            title: "Cracked Sidewalk",
+            type: "sidewalk",
+            status: "in-progress",
+            location: "789 Pine Road",
+            date: "4 days ago",
+            userReported: false
+          }
+        ];
+        
+        // Render recent issues
+        const issuesList = document.getElementById('recentIssuesList');
+        recentIssues.forEach(issue => {
+          const typeIcon = {
+            pothole: '<i class="fas fa-road"></i>',
+            water: '<i class="fas fa-tint"></i>',
+            lighting: '<i class="fas fa-lightbulb"></i>',
+            sidewalk: '<i class="fas fa-walking"></i>'
+          }[issue.type] || '<i class="fas fa-exclamation-circle"></i>';
+          
+          const typeClass = `type-${issue.type}`;
+          const statusClass = `status-${issue.status.replace('-', '')}`;
+          const statusText = issue.status.replace('-', ' ').toUpperCase();
+          
+          const issueRow = document.createElement('div');
+          issueRow.className = 'issue-row';
+          issueRow.innerHTML = `
+            <div class="issue-type ${typeClass}">
+              ${typeIcon}
+            </div>
+            <div class="issue-details">
+              <div class="issue-title">${issue.title}</div>
+              <div class="issue-meta">
+                <span><i class="fas fa-map-marker-alt"></i> ${issue.location}</span>
+                <span><i class="fas fa-clock"></i> ${issue.date}</span>
+                ${issue.userReported ? '<span><i class="fas fa-user"></i> Your Report</span>' : ''}
+              </div>
+            </div>
+            <div class="issue-status ${statusClass}">${statusText}</div>
+          `;
+          
+          issuesList.appendChild(issueRow);
+        });
+        
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+          if (confirm('Are you sure you want to logout?')) {
+            // In a real app, you would clear session/tokens here
+            // window.location.href = 'login.html';
+            alert('Logout successful! Redirecting to login...');
+          }
+        });
+        
+        // Simulate loading user stats
+        setTimeout(() => {
+          // These would normally come from your backend
+          document.getElementById('reportedCount').textContent = '12';
+          document.getElementById('inProgressCount').textContent = '5';
+          document.getElementById('resolvedCount').textContent = '7';
+          document.getElementById('contributionScore').textContent = '89';
+        }, 500);
+        
+        // Add animation to stats cards
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach((card, index) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 200 + (index * 100));
+        });
+      });
+    </script>
+  </body>
+</html>

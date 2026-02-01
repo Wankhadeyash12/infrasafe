@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Issue Map - InfraSafe</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      :root {
+        --primary-color: #2196F3;
+        --primary-dark: #1976D2;
+        --gradient-start: #1976D2;
+        --gradient-end: #2196F3;
+        --danger-color: #F44336;
+        --warning-color: #FF9800;
+        --success-color: #4CAF50;
+        --info-color: #00BCD4;
+      }
+      
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8fafc;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      
+      /* Modern Navbar */
+      .navbar {
+        background: white;
+        padding: 18px 0;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      
+      .navbar-brand {
+        font-weight: 800;
+        font-size: 24px;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+      }
+      
+      .navbar-brand i {
+        margin-right: 10px;
+        font-size: 28px;
+      }
+      
+      .nav-back-btn {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+      }
+      
+      .nav-back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(33, 150, 243, 0.4);
+        color: white;
+      }
+      
+      /* Map Container */
+      .map-container {
+        position: relative;
+        height: calc(100vh - 80px);
+        padding: 0;
+      }
+      
+      #map {
+        height: 100%;
+        width: 100%;
+        z-index: 1;
+      }
+      
+      /* Map Controls */
+      .map-controls {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .map-control-btn {
+        width: 50px;
+        height: 50px;
+        background: white;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #424242;
+        font-size: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: none;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      
+      .map-control-btn:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      }
+      
+      .map-control-btn.active {
+        background: var(--primary-color);
+        color: white;
+      }
+      
+      /* Map Sidebar */
+      .map-sidebar {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        width: 320px;
+        max-height: calc(100vh - 120px);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+      
+      .map-sidebar.collapsed {
+        transform: translateX(-350px);
+      }
+      
+      .sidebar-header {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+        padding: 25px;
+      }
+      
+      .sidebar-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      
+      .sidebar-title i {
+        cursor: pointer;
+        opacity: 0.9;
+        transition: opacity 0.3s;
+      }
+      
+      .sidebar-title i:hover {
+        opacity: 1;
+      }
+      
+      .sidebar-subtitle {
+        font-size: 0.9rem;
+        opacity: 0.9;
+      }
+      
+      .sidebar-body {
+        padding: 25px;
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+      }
+      
+      /* Filter Section */
+      .filter-section {
+        margin-bottom: 25px;
+      }
+      
+      .filter-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #424242;
+        display: flex;
+        align-items: center;
+      }
+      
+      .filter-title i {
+        margin-right: 10px;
+        color: var(--primary-color);
+      }
+      
+      .filter-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      
+      .filter-tag {
+        background: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .filter-tag:hover {
+        background: #e3f2fd;
+        border-color: var(--primary-color);
+      }
+      
+      .filter-tag.active {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+      
+      .filter-tag.pothole { border-left: 4px solid #F44336; }
+      .filter-tag.water { border-left: 4px solid #2196F3; }
+      .filter-tag.lighting { border-left: 4px solid #FF9800; }
+      .filter-tag.sidewalk { border-left: 4px solid #4CAF50; }
+      .filter-tag.traffic { border-left: 4px solid #9C27B0; }
+      
+      /* Issues List */
+      .issues-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .issue-card {
+        background: white;
+        border-radius: 15px;
+        padding: 18px;
+        border: 1px solid #e8e8e8;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .issue-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary-color);
+      }
+      
+      .issue-card.active {
+        border-color: var(--primary-color);
+        background: #f0f7ff;
+      }
+      
+      .issue-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 10px;
+      }
+      
+      .issue-title {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #212121;
+      }
+      
+      .issue-status {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-weight: 600;
+      }
+      
+      .status-pending { background: #FFF3E0; color: #EF6C00; }
+      .status-in-progress { background: #E3F2FD; color: #1565C0; }
+      .status-resolved { background: #E8F5E9; color: #2E7D32; }
+      
+      .issue-meta {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 10px;
+        font-size: 0.85rem;
+        color: #616161;
+      }
+      
+      .issue-meta i {
+        margin-right: 5px;
+      }
+      
+      .issue-description {
+        font-size: 0.9rem;
+        color: #424242;
+        line-height: 1.5;
+        margin-bottom: 10px;
+      }
+      
+      .issue-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.8rem;
+        color: #757575;
+      }
+      
+      .issue-actions {
+        display: flex;
+        gap: 10px;
+      }
+      
+      .action-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #f5f5f5;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #616161;
+        transition: all 0.3s ease;
+      }
+      
+      .action-btn:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+      
+      /* Map Legend */
+      .map-legend {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        width: 200px;
+      }
+      
+      .legend-title {
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #212121;
+        font-size: 1rem;
+      }
+      
+      .legend-items {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .legend-item {
+        display: flex;
+        align-items: center;
+        font-size: 0.85rem;
+        color: #424242;
+      }
+      
+      .legend-color {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+      
+      .color-pothole { background: #F44336; }
+      .color-water { background: #2196F3; }
+      .color-lighting { background: #FF9800; }
+      .color-sidewalk { background: #4CAF50; }
+      .color-traffic { background: #9C27B0; }
+      
+      /* Report Button */
+      .report-button {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+      }
+      
+      .btn-report {
+        background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 14px 32px;
+        font-weight: 600;
+        font-size: 16px;
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+      }
+      
+      .btn-report:hover {
+        transform: translateY(-3px) translateX(-50%);
+        box-shadow: 0 10px 25px rgba(33, 150, 243, 0.5);
+      }
+      
+      .btn-report i {
+        margin-right: 10px;
+        font-size: 18px;
+      }
+      
+      /* Loading Screen */
+      .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        transition: opacity 0.5s ease;
+      }
+      
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading-text {
+        font-size: 1.1rem;
+        color: #424242;
+        font-weight: 500;
+      }
+      
+      /* Responsive Design */
+      @media (max-width: 992px) {
+        .map-sidebar {
+          width: 280px;
+        }
+        
+        .map-sidebar.collapsed {
+          transform: translateX(-300px);
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .map-controls {
+          top: 10px;
+          right: 10px;
+        }
+        
+        .map-sidebar {
+          width: 260px;
+          left: 10px;
+          top: 10px;
+        }
+        
+        .map-legend {
+          width: 180px;
+          right: 10px;
+          bottom: 80px;
+        }
+        
+        .btn-report {
+          padding: 12px 24px;
+          font-size: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading Map & Issues...</div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container">
+        <a class="navbar-brand" href="citizen-dashboard.html">
+          <i class="fas fa-shield-alt"></i> InfraSafe
+        </a>
+        <a href="citizen-dashboard.html" class="nav-back-btn">
+          <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+        </a>
+      </div>
+    </nav>
+    
+    <!-- Map Container -->
+    <div class="map-container">
+      <div id="map"></div>
+      
+      <!-- Map Controls -->
+      <div class="map-controls">
+        <button class="map-control-btn" id="zoomIn">
+          <i class="fas fa-plus"></i>
+        </button>
+        <button class="map-control-btn" id="zoomOut">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button class="map-control-btn" id="myLocation">
+          <i class="fas fa-crosshairs"></i>
+        </button>
+        <button class="map-control-btn" id="toggleSatellite">
+          <i class="fas fa-satellite"></i>
+        </button>
+      </div>
+      
+      <!-- Map Sidebar -->
+      <div class="map-sidebar" id="mapSidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">
+            <span>Issues Map</span>
+            <i class="fas fa-times" id="closeSidebar"></i>
+          </div>
+          <div class="sidebar-subtitle">Active infrastructure issues in your area</div>
+        </div>
+        
+        <div class="sidebar-body">
+          <!-- Filters -->
+          <div class="filter-section">
+            <div class="filter-title">
+              <i class="fas fa-filter"></i> Filter by Issue Type
+            </div>
+            <div class="filter-tags">
+              <div class="filter-tag pothole active" data-type="pothole">Potholes</div>
+              <div class="filter-tag water" data-type="water">Water Leaks</div>
+              <div class="filter-tag lighting" data-type="lighting">Street Lights</div>
+              <div class="filter-tag sidewalk" data-type="sidewalk">Sidewalks</div>
+              <div class="filter-tag traffic" data-type="traffic">Traffic Signals</div>
+            </div>
+          </div>
+          
+          <!-- Issues List -->
+          <div class="filter-section">
+            <div class="filter-title">
+              <i class="fas fa-exclamation-circle"></i> Recent Issues
+              <span class="badge bg-primary ms-2" id="issueCount">5</span>
+            </div>
+            <div class="issues-list" id="issuesList">
+              <!-- Issues will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Map Legend -->
+      <div class="map-legend">
+        <div class="legend-title">Issue Types</div>
+        <div class="legend-items">
+          <div class="legend-item">
+            <div class="legend-color color-pothole"></div>
+            <span>Potholes</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color color-water"></div>
+            <span>Water Issues</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color color-lighting"></div>
+            <span>Street Lights</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color color-sidewalk"></div>
+            <span>Sidewalks</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color color-traffic"></div>
+            <span>Traffic Signals</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Report Button -->
+      <div class="report-button">
+        <button class="btn-report" id="reportIssue">
+          <i class="fas fa-plus-circle"></i> Report New Issue
+        </button>
+      </div>
+    </div>
+
+    <!-- Insert your Google Maps API key below -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfxK99cTEPoEYNxOnuxj7YmkuSYcmBtm0&callback=initMap" async defer></script>
+    
+    <!-- Map JS -->
+    <script src="../js/map.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+      // Sample issues data (replace with real data from your backend)
+      const sampleIssues = [
+        {
+          id: 1,
+          title: "Large Pothole on Main Street",
+          type: "pothole",
+          status: "pending",
+          description: "Deep pothole causing traffic issues near intersection",
+          address: "123 Main Street",
+          date: "2 hours ago",
+          latitude: 40.7128,
+          longitude: -74.0060,
+          severity: "high"
+        },
+        {
+          id: 2,
+          title: "Water Leak at Park Avenue",
+          type: "water",
+          status: "in-progress",
+          description: "Continuous water leak from underground pipe",
+          address: "456 Park Avenue",
+          date: "1 day ago",
+          latitude: 40.7282,
+          longitude: -74.0776,
+          severity: "medium"
+        },
+        {
+          id: 3,
+          title: "Broken Street Light",
+          type: "lighting",
+          status: "pending",
+          description: "Street light not working for past 3 days",
+          address: "789 Broadway",
+          date: "3 days ago",
+          latitude: 40.7589,
+          longitude: -73.9851,
+          severity: "medium"
+        },
+        {
+          id: 4,
+          title: "Cracked Sidewalk",
+          type: "sidewalk",
+          status: "resolved",
+          description: "Large crack posing tripping hazard",
+          address: "101 Pine Street",
+          date: "1 week ago",
+          latitude: 40.7505,
+          longitude: -73.9934,
+          severity: "low"
+        },
+        {
+          id: 5,
+          title: "Malfunctioning Traffic Signal",
+          type: "traffic",
+          status: "in-progress",
+          description: "Red light not changing to green",
+          address: "202 Oak Street",
+          date: "5 hours ago",
+          latitude: 40.7359,
+          longitude: -74.1724,
+          severity: "high"
+        }
+      ];
+
+      // Initialize map
+      function initMap() {
+        // Hide loading screen
+        document.getElementById('loadingScreen').style.opacity = '0';
+        setTimeout(() => {
+          document.getElementById('loadingScreen').style.display = 'none';
+        }, 500);
+        
+        // Default map center (New York City)
+        const defaultCenter = { lat: 40.7128, lng: -74.0060 };
+        
+        // Create map
+        const map = new google.maps.Map(document.getElementById('map'), {
+          center: defaultCenter,
+          zoom: 13,
+          styles: [
+            {
+              featureType: "all",
+              elementType: "geometry",
+              stylers: [{ color: "#f5f5f5" }]
+            },
+            {
+              featureType: "water",
+              elementType: "geometry",
+              stylers: [{ color: "#c9c9c9" }]
+            },
+            {
+              featureType: "road",
+              elementType: "geometry",
+              stylers: [{ color: "#ffffff" }]
+            }
+          ]
+        });
+        
+        // Add markers for sample issues
+        sampleIssues.forEach(issue => {
+          const markerColor = getMarkerColor(issue.type);
+          
+          const marker = new google.maps.Marker({
+            position: { lat: issue.latitude, lng: issue.longitude },
+            map: map,
+            title: issue.title,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              fillColor: markerColor,
+              fillOpacity: 1,
+              strokeColor: '#ffffff',
+              strokeWeight: 2,
+              scale: 10
+            }
+          });
+          
+          // Add info window
+          const infoWindow = new google.maps.InfoWindow({
+            content: `
+              <div style="padding: 10px; max-width: 250px;">
+                <h5 style="margin: 0 0 8px 0; color: #212121;">${issue.title}</h5>
+                <p style="margin: 0 0 8px 0; color: #616161; font-size: 14px;">${issue.description}</p>
+                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                  <span style="background: ${markerColor}; color: white; padding: 2px 8px; border-radius: 10px; font-size: 12px; margin-right: 8px;">
+                    ${issue.type.charAt(0).toUpperCase() + issue.type.slice(1)}
+                  </span>
+                  <span style="font-size: 12px; color: #757575;">${issue.address}</span>
+                </div>
+                <div style="font-size: 12px; color: #757575;">
+                  <i class="fas fa-clock"></i> Reported ${issue.date}
+                </div>
+              </div>
+            `
+          });
+          
+          marker.addListener('click', () => {
+            infoWindow.open(map, marker);
+            // Highlight corresponding card in sidebar
+            highlightIssueCard(issue.id);
+          });
+        });
+        
+        // Update issue count
+        document.getElementById('issueCount').textContent = sampleIssues.length;
+        
+        // Render issues in sidebar
+        renderIssuesList();
+        
+        // Map controls functionality
+        document.getElementById('zoomIn').addEventListener('click', () => {
+          map.setZoom(map.getZoom() + 1);
+        });
+        
+        document.getElementById('zoomOut').addEventListener('click', () => {
+          map.setZoom(map.getZoom() - 1);
+        });
+        
+        document.getElementById('myLocation').addEventListener('click', () => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+                map.setCenter(pos);
+                map.setZoom(15);
+              },
+              () => {
+                alert('Error: The Geolocation service failed.');
+              }
+            );
+          } else {
+            alert('Error: Your browser doesn\'t support geolocation.');
+          }
+        });
+        
+        let isSatellite = false;
+        document.getElementById('toggleSatellite').addEventListener('click', function() {
+          isSatellite = !isSatellite;
+          map.setMapTypeId(isSatellite ? 'hybrid' : 'roadmap');
+          this.classList.toggle('active', isSatellite);
+        });
+        
+        // Close sidebar functionality
+        document.getElementById('closeSidebar').addEventListener('click', () => {
+          document.getElementById('mapSidebar').classList.add('collapsed');
+        });
+        
+        // Filter functionality
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+          tag.addEventListener('click', function() {
+            document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            filterIssues(this.dataset.type);
+          });
+        });
+        
+        // Report issue button
+        document.getElementById('reportIssue').addEventListener('click', () => {
+          alert('Redirecting to issue reporting form...');
+          // window.location.href = 'report-issue.html';
+        });
+      }
+      
+      // Helper function to get marker color based on issue type
+      function getMarkerColor(type) {
+        const colors = {
+          pothole: '#F44336',
+          water: '#2196F3',
+          lighting: '#FF9800',
+          sidewalk: '#4CAF50',
+          traffic: '#9C27B0'
+        };
+        return colors[type] || '#757575';
+      }
+      
+      // Render issues list in sidebar
+      function renderIssuesList() {
+        const issuesList = document.getElementById('issuesList');
+        issuesList.innerHTML = '';
+        
+        sampleIssues.forEach(issue => {
+          const statusClass = `status-${issue.status.replace('-', '')}`;
+          const statusText = issue.status.replace('-', ' ').toUpperCase();
+          
+          const issueCard = document.createElement('div');
+          issueCard.className = 'issue-card';
+          issueCard.dataset.id = issue.id;
+          issueCard.innerHTML = `
+            <div class="issue-header">
+              <div class="issue-title">${issue.title}</div>
+              <div class="issue-status ${statusClass}">${statusText}</div>
+            </div>
+            <div class="issue-meta">
+              <div><i class="fas fa-map-marker-alt"></i> ${issue.address}</div>
+              <div><i class="fas fa-clock"></i> ${issue.date}</div>
+            </div>
+            <div class="issue-description">${issue.description}</div>
+            <div class="issue-footer">
+              <div>
+                <span class="badge" style="background: ${getMarkerColor(issue.type)}; color: white;">
+                  ${issue.type.charAt(0).toUpperCase() + issue.type.slice(1)}
+                </span>
+              </div>
+              <div class="issue-actions">
+                <button class="action-btn" title="View Details">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-btn" title="Share">
+                  <i class="fas fa-share-alt"></i>
+                </button>
+              </div>
+            </div>
+          `;
+          
+          issueCard.addEventListener('click', () => {
+            highlightIssueCard(issue.id);
+            // In a real app, you would also center the map on this issue
+            // map.setCenter({ lat: issue.latitude, lng: issue.longitude });
+            // map.setZoom(16);
+          });
+          
+          issuesList.appendChild(issueCard);
+        });
+      }
+      
+      // Highlight issue card in sidebar
+      function highlightIssueCard(issueId) {
+        document.querySelectorAll('.issue-card').forEach(card => {
+          card.classList.remove('active');
+          if (parseInt(card.dataset.id) === issueId) {
+            card.classList.add('active');
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+      }
+      
+      // Filter issues by type
+      function filterIssues(type) {
+        if (type === 'all') {
+          document.querySelectorAll('.issue-card').forEach(card => {
+            card.style.display = 'flex';
+          });
+        } else {
+          document.querySelectorAll('.issue-card').forEach(card => {
+            // In a real app, you would check the issue type
+            // For demo, we'll show all cards
+            card.style.display = 'flex';
+          });
+        }
+      }
+      
+      // Show sidebar by default (after a delay for demo)
+      setTimeout(() => {
+        document.getElementById('mapSidebar').classList.remove('collapsed');
+      }, 1000);
+      
+      // Handle Google Maps API error
+      function gm_authFailure() {
+        alert('Google Maps API key is missing or invalid. Please add a valid API key.');
+      }
+    </script>
+  </body>
+</html>
